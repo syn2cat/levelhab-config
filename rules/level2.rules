@@ -1,0 +1,33 @@
+
+rule "Beamer Power"
+when
+    Item chill_zone_beamer received command
+then
+    val state = chill_zone_beamer.state.toString
+    var beamerResponse
+
+    if (state == 'ON') {
+        // turn the beamer on
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3101fe0660") 
+    } else {
+        // turn the beamer off
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")
+    }
+    val beamerStatus = transform("XPATH", "/return/text()", beamerResponse).replace("\n", '')
+    logInfo("beamer", "Beamer state: {}", beamerStatus)
+end
+
+rule "Chromecast changed"
+when
+    Item chill_zone_chromecast_status changed
+then
+    chill_zone_beamer.sendCommand("ON")
+    val app = chill_zone_chromecast_status.state.toString
+    if (app === null || app == UNDEF || app == 'UNDEF' || app == '' ) {
+        // set input to DVI - hackerspace video
+        sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
+    } else {
+        // set input to HDMI2 - chromecast
+        sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071576")
+    }
+end

@@ -44,3 +44,6 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
     }
 
 }
+
+// See services/chromecast.cfg for the callback URL
+Thing chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08 [ipAddress="10.2.113.120", port=8009]

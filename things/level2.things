@@ -15,12 +15,31 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
             ]
     }
 
+    // ----------------------------------------------------------------------------
+
+    Thing topic chill_zone_screen "Screen" @ "Chill Zone" {
+        Channels:
+            Type switch : up  "Up"  [
+                commandTopic="cmnd/chill_zone/screen/Power1"
+            ]
+
+            Type switch : stop  "Stop"  [
+                commandTopic="cmnd/chill_zone/screen/Power2"
+            ]
+
+            Type switch : down  "Down"  [
+                commandTopic="cmnd/chill_zone/screen/Power3"
+            ]
+    }
+
     Thing topic chill_zone_lamps "Lamps" @ "Chill zone" {
         Channels:
             Type switch : power  "Power"  [
                 commandTopic="cmnd/chill_zone/sonoffs/Power"
             ]
     }
+
+    // ----------------------------------------------------------------------------
 
     Thing topic engineering_table_lamps "Engineering Table Lamps" @ "Engineering" {
         Channels:

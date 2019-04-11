@@ -17,17 +17,51 @@ then
     logInfo("beamer", "Beamer state: {}", beamerStatus)
 end
 
+// ----------------------------------------------------------------------------
+
 rule "Chromecast changed"
 when
     Item chill_zone_chromecast_status changed
 then
     chill_zone_beamer.sendCommand("ON")
+    chill_zone_screen_button_down.sendCommand("ON")
     val app = chill_zone_chromecast_status.state.toString
     if (app === null || app == UNDEF || app == 'UNDEF' || app == '' ) {
         // set input to DVI - hackerspace video
         sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
+        logInfo('beamer', 'Switch to input DVI')
     } else {
         // set input to HDMI2 - chromecast
         sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071576")
+        logInfo('beamer', 'Switch to input HDMI2')
     }
+end
+
+// ----------------------------------------------------------------------------
+
+rule "Screen up"
+when
+    Item chill_zone_screen_button_up received command ON
+then
+    logInfo('screen', 'Screen up')
+    Thread::sleep(2000)
+    chill_zone_screen_button_up.sendCommand(OFF)
+end
+
+rule "Screen stop"
+when
+    Item chill_zone_screen_button_stop received command ON
+then
+    logInfo('screen', 'Screen stop')
+    Thread::sleep(2000)
+    chill_zone_screen_button_stop.sendCommand(OFF)
+end
+
+rule "Screen down"
+when
+    Item chill_zone_screen_button_down received command ON
+then
+    logInfo('screen', 'Screen down')
+    Thread::sleep(2000)
+    chill_zone_screen_button_down.sendCommand(OFF)
 end

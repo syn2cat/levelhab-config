@@ -16,6 +16,7 @@ Switch  engineering_table_lamps     "Table Lamps"   <lightbulb> (engineering)   
 Switch  engineering_ceiling_lamps   "Ceiling Lamps" <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
 Switch  engineering_status_lamp     "Status Lamp"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }
 
+// ----------------------------------------------------------------------------
 
 // If ChromeCast doesn't work you have to link this item with the Chromecast channel manually
 String  chill_zone_chromecast_appid
@@ -27,6 +28,22 @@ String  chill_zone_chromecast_status
     "Chromecast Status [%s]"
     { channel="chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08:statustext" }
 
+// ----------------------------------------------------------------------------
+
 Switch  chill_zone_beamer
     "Beamer"
     (chill_zone)
+
+// ----------------------------------------------------------------------------
+
+Switch chill_zone_screen_button_up
+    "Screen up"
+    { channel="mqtt:topic:chill_zone_screen:up", autoupdate="false" }
+
+Switch chill_zone_screen_button_stop
+    "Screen stop"
+    { channel="mqtt:topic:chill_zone_screen:stop", autoupdate="false" }
+
+Switch chill_zone_screen_button_down
+    "Screen down"
+    { channel="mqtt:topic:chill_zone_screen:down", autoupdate="false" }

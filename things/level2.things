@@ -1,0 +1,46 @@
+
+Bridge mqtt:broker:mosquitto "Mosquitto" [ 
+    host="localhost", 
+    port=1883, 
+    secure=false, 
+    username="", 
+    password="", 
+    clientID="openHAB2"
+]{
+    
+    Thing topic entrance_ceiling_lamps "Entrance Ceiling Lamps" @ "Entrance" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/entrance/ceiling_lamp/Power"
+            ]
+    }
+
+    Thing topic chill_zone_lamps "Lamps" @ "Chill zone" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/chill_zone/sonoffs/Power"
+            ]
+    }
+
+    Thing topic engineering_table_lamps "Engineering Table Lamps" @ "Engineering" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/engineering/table/sonoffs/Power"
+            ]
+    }
+
+    Thing topic engineering_ceiling_lamps "Engineering Ceiling Lamps" @ "Engineering" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/engineering/ceiling/lamp/Power"
+            ]
+    }
+
+    Thing topic engineering_status_lamp "Engineering Status Lamp" @ "Engineering" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/engineering/status_lamp/Power"
+            ]
+    }
+
+}

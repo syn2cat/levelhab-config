@@ -1,0 +1,17 @@
+Group   level2          "Level2"
+
+Group   ground_floor    "Ground Floor" <groundfloor> (level2)
+Group   main_floor      "Second Floor" <firstfloor>  (level2)
+
+Group   engineering     "Engineering"   (main_floor)
+Group   lab             "Lab"           (main_floor)
+Group   chill_zone      "Chill Zone"    (main_floor)
+Group   entrance        "Entrance"      (main_floor)
+
+//-------------------------------------------------------------------------------
+
+Switch  entrance_ceiling_lamps      "Ceiling Lamps" <lightbulb> (entrance)      { channel="mqtt:topic:entrance_ceiling_lamps:power"    }
+Switch  chill_zone_lamps            "Lamps"         <lightbulb> (chill_zone)    { channel="mqtt:topic:chill_zone_lamps:power"          }
+Switch  engineering_table_lamps     "Table Lamps"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps:power"   }
+Switch  engineering_ceiling_lamps   "Ceiling Lamps" <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
+Switch  engineering_status_lamp     "Status Lamp"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }

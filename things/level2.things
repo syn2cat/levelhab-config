@@ -8,6 +8,13 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
     clientID="openHAB2"
 ]{
     
+    Thing topic entrance_door_status "Entrance Door Status" @ "Entrance" {
+        Channels:
+            Type switch : status  "Status"  [
+                stateTopic="stat/entrance/door_status/POWER"
+            ]
+    }
+
     Thing topic entrance_ceiling_lamps "Entrance Ceiling Lamps" @ "Entrance" {
         Channels:
             Type switch : power  "Power"  [

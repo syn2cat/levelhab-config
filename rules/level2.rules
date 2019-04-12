@@ -1,4 +1,38 @@
 
+rule "Door Status"
+when
+    Item entrance_door_status changed
+then
+    val state = entrance_door_status.state.toString
+
+    // the sensor state is inverted:
+    //   OFF means opened
+    //   ON  means opened
+    if (state == 'OFF') {
+        logInfo('door', 'opened')
+        entrance_ceiling_lamps.sendCommand("ON")
+        chill_zone_lamps.sendCommand("ON")
+        engineering_table_lamps.sendCommand("ON")
+        engineering_ceiling_lamps.sendCommand("ON")
+        engineering_status_lamp.sendCommand("ON")
+    } else {
+        logInfo('door', 'closed')
+        // turn the beamer off
+        sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")
+        chill_zone_screen_button_up.sendCommand("ON")
+        entrance_ceiling_lamps.sendCommand("OFF")
+        chill_zone_lamps.sendCommand("OFF")
+        engineering_table_lamps.sendCommand("OFF")
+        engineering_ceiling_lamps.sendCommand("OFF")
+        engineering_status_lamp.sendCommand("OFF")
+    }
+    
+    
+    logInfo("door", "Space state: {}", state)
+end
+
+// ----------------------------------------------------------------------------
+
 rule "Beamer Power"
 when
     Item chill_zone_beamer received command

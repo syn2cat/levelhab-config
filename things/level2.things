@@ -69,6 +69,13 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
             ]
     }
 
+    Thing topic engineering_phone_flash "Engineering Phone Flash" @ "Engineering" {
+        Channels:
+            Type switch : pulse  "Flash"  [
+                commandTopic="cmnd/engineering/ceiling/phone_flash/Power"
+            ]
+    }
+
 }
 
 // See services/chromecast.cfg for the callback URL

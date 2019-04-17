@@ -33,6 +33,21 @@ end
 
 // ----------------------------------------------------------------------------
 
+rule "Phone Ringing"
+when
+    Time cron "*/2 * * ? * *"
+then
+    // we could also fetch the XML but fetching the HTML seems to be faster
+    // http://10.2.113.137/admin/spacfg.xml
+    val phoneResponse = sendHttpGetRequest("http://10.2.113.137")
+    val isRinging = "Ringing" == (transform("REGEX", ".*(Ringing).*", phoneResponse))
+    if (isRinging) {
+        engineering_ceiling_phone_flash.sendCommand("ON")
+    }
+end
+
+// ----------------------------------------------------------------------------
+
 rule "Beamer Power"
 when
     Item chill_zone_beamer received command

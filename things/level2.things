@@ -76,7 +76,38 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
             ]
     }
 
+    // ----------------------------------------------------------------------------
+
+    Thing topic area42_status_lamp "Area42 Status Lamp" @ "Area42" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/area42/status_lamp/Power"
+            ]
+    }
+
+    // ----------------------------------------------------------------------------
+
+    Thing topic lab_soldering_table "Soldering table" @ "Lab" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/lab/soldering_table/Power", stateTopic="stat/lab/soldering_table/Power"
+            ]
+    }
+
+    // ----------------------------------------------------------------------------§
+
+         
+    Thing topic irremote "IR remote" @ "Chill Zone" {
+
+            Type string : ir_code "ircode" 
+            [ commandTopic="cmnd/chill_zone/irremote/IRSEND"
+            ]
+
+    }
 }
 
 // See services/chromecast.cfg for the callback URL
 Thing chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08 [ipAddress="10.2.113.120", port=8009]
+
+//Thing exec:command:meaow [command="espeak -s 250 'meow meow meow meow meow meow meow meow' && espeak -s 250 -p 99 'meow meow meow meow meow meow' && espeak -s 250 -p 10 'meow meow meow meow meow meow' && espeak -s 30 -p 1 'meow meow meow meow'", autorun=false]
+//Thing exec:command:meaow [command="espeak -s 250 'meow meow meow meow meow meow meow meow'", autorun=false]

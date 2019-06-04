@@ -1,0 +1,22 @@
+amp_off     = {"Protocol":"NEC","Bits":32,"Data":"0xA55AD827"}
+amp_on      = {"Protocol":"NEC","Bits":32,"Data":"0xA55A38C7"}
+amp_jack1   = {"Protocol":"NEC","Bits":32,"Data":"0xA55AF00F"}
+amp_jack2   = {"Protocol":"NEC","Bits":32,"Data":"0xA55A708F"}
+amp_hdmi    = {"Protocol":"NEC","Bits":32,"Data":"0xA55AA15E"}
+amp_optical = {"Protocol":"NEC","Bits":32,"Data":"0xA55A8877"}
+amp_cd      = {"Protocol":"NEC","Bits":32,"Data":"0xA55A32CD"}
+amp_tuner   = {"Protocol":"NEC","Bits":32,"Data":"0xA55AE21D"}
+amp_volup   = {"Protocol":"NEC","Bits":32,"Data":"0xA55A50AF"}
+amp_voldown = {"Protocol":"NEC","Bits":32,"Data":"0xA55AD02F"}
+
+br_power    = {"Protocol":"SONY","Bits":20,"Data":"0xA8B47"}
+br_menu     = {"Protocol":"SONY","Bits":20,"Data":"0x34B47"}
+br_up       = {"Protocol":"SONY","Bits":20,"Data":"0x9CB47"}
+br_down     = {"Protocol":"SONY","Bits":20,"Data":"0x5CB47"}
+br_left     = {"Protocol":"SONY","Bits":20,"Data":"0xDCB47"}
+br_right    = {"Protocol":"SONY","Bits":20,"Data":"0x3CB47"}
+br_ok       = {"Protocol":"SONY","Bits":20,"Data":"0xBCB47"}
+br_pause    = {"Protocol":"SONY","Bits":20,"Data":"0x98B47"}
+br_play     = {"Protocol":"SONY","Bits":20,"Data":"0x58B47"}
+br_language = {"Protocol":"SONY","Bits":20,"Data":"0x26B47"}
+br_subtitle = {"Protocol":"SONY","Bits":20,"Data":"0xC6B47"}

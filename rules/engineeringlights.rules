@@ -1,0 +1,18 @@
+rule "Engineering Lights ON"
+when
+  Item all_engineering_lights changed from OFF to ON
+then
+  engineering_table_lamps.sendCommand("ON")
+  engineering_ceiling_lamps.sendCommand("ON")
+end
+
+
+rule "Engineering Lights OFF"
+when
+  Item all_engineering_lights changed from ON to OFF
+then
+  engineering_table_lamps.sendCommand("OFF")
+  engineering_ceiling_lamps.sendCommand("OFF")
+end
+
+

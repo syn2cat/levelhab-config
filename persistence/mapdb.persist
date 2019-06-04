@@ -1,0 +1,7 @@
+Strategies {
+    default = everyChange
+}
+
+Items {
+    entrance_people_counter: strategy = everyChange
+}

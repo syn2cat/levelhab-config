@@ -1,0 +1,62 @@
+// this basically implements a vitual device
+// first the 3 buttons
+rule "Screen up"
+when
+    Item chill_zone_screen_button_up received command ON
+then
+    logInfo('screen', 'Screen up')
+    Thread::sleep(1000)
+    chill_zone_screen_button_up.sendCommand(OFF)
+end
+
+rule "Screen stop"
+when
+    Item chill_zone_screen_button_stop received command ON
+then
+    logInfo('screen', 'Screen stop')
+    Thread::sleep(1000)
+    chill_zone_screen_button_stop.sendCommand(OFF)
+end
+
+rule "Screen down"
+when
+    Item chill_zone_screen_button_down received command ON
+then
+    logInfo('screen', 'Screen down')
+    Thread::sleep(1000)
+    chill_zone_screen_button_down.sendCommand(OFF)
+end
+
+// and here is the thing as a window blind
+rule "Chill Projection Screen"
+when
+  Item chill_projection_screen received command
+then
+  switch(receivedCommand.toString.toUpperCase){
+    case "UP": {    
+      chill_zone_screen_button_up.sendCommand("ON")
+    }
+    case "STOP": {
+      chill_zone_screen_button_stop.sendCommand("ON")
+    }
+    case "DOWN": {
+      chill_zone_screen_button_down.sendCommand("ON")
+    }
+  }
+end
+
+    // val maxCount = 1
+    // if (count > maxCount) {
+        //logInfo("loggerName", "more than {}", maxCount)
+        // chill_zone_meaow.sendCommand("ON")
+
+
+        // while(chill_zone_meaow.state != OFF){
+        //     Thread::sleep(500)
+        // }
+
+        // Thread::sleep(3500)
+
+        //playSound("doorbell.mp3")
+    // }
+

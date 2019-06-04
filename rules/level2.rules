@@ -1,4 +1,6 @@
 
+var Timer ChromeCastOffTimer = null
+
 rule "Door Status"
 when
     Item entrance_door_status changed
@@ -15,6 +17,7 @@ then
         engineering_table_lamps.sendCommand("ON")
         engineering_ceiling_lamps.sendCommand("ON")
         engineering_status_lamp.sendCommand("ON")
+        area42_status_lamp.sendCommand("ON")
     } else {
         logInfo('door', 'closed')
         // turn the beamer off
@@ -25,10 +28,37 @@ then
         engineering_table_lamps.sendCommand("OFF")
         engineering_ceiling_lamps.sendCommand("OFF")
         engineering_status_lamp.sendCommand("OFF")
+        area42_status_lamp.sendCommand("OFF")
+        lab_soldering_table.sendCommand("OFF")
     }
     
     
     logInfo("door", "Space state: {}", state)
+end
+
+// ----------------------------------------------------------------------------
+
+rule "Poll People Counter"
+when
+    //        sec min hour day month weekday year(opt)
+    Time cron "*/2 * * ? * *"
+then
+    val response = sendHttpGetRequest("http://10.2.113.8/output.cgi")
+    val count = java.lang.Integer.parseInt(
+        transform("XPATH", "/table/tr[4]/td[2]/text()", response).trim()
+    )
+    if ( count != Integer.parseInt(entrance_people_counter.previousState().state.toString)) {
+        entrance_people_counter.postUpdate(count)
+    }
+end
+
+// ----------------------------------------------------------------------------
+
+rule "Tweet People Count"
+when
+    Item entrance_people_counter changed
+then
+//   sendTweet('There are currently ' + entrance_people_counter.state.toString + ' hackers present. Just pass by!')
 end
 
 // ----------------------------------------------------------------------------
@@ -68,49 +98,47 @@ end
 
 // ----------------------------------------------------------------------------
 
+
 rule "Chromecast changed"
 when
     Item chill_zone_chromecast_status changed
 then
-    chill_zone_beamer.sendCommand("ON")
-    chill_zone_screen_button_down.sendCommand("ON")
-    val app = chill_zone_chromecast_status.state.toString
-    if (app === null || app == UNDEF || app == 'UNDEF' || app == '' ) {
-        // set input to DVI - hackerspace video
-        sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
-        logInfo('beamer', 'Switch to input DVI')
+    val l2state = entrance_door_status.state.toString
+    if (l2state == 'ON') {
+  	  // do nothing if Level2 is closed
+
     } else {
+    
+      val app = chill_zone_chromecast_status.state.toString
+      if (app === null || app == UNDEF || app == 'UNDEF' || app == '' || app == 'BackDrop' ) {
+        // set input to DVI - hackerspace video
+        logInfo('beamer', 'start 2min delay before switch input to DVI')
+//        ChromeCastOffTimer.cancel()  // stop any timer running 
+        ChromeCastOffTimer=createTimer(now.plusSeconds(30)) [
+          app = chill_zone_chromecast_status.state.toString
+          if (app === null || app == UNDEF || app == 'UNDEF' || app == '' || app == 'BackDrop' ) {
+            sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
+            logInfo('beamer', 'Switch to input DVI (after 2min)')
+          } else {
+            logInfo('beamer', 'after 2min, chromecast again streaming. Not switching off.')
+          }
+        ]
+      } else {
+        if (ChromeCastOffTimer !== null) {
+            logInfo('chromecast', 'disabling off timer')
+            ChromeCastOffTimer.cancel()  // stop any timer running 
+        } else {
+            logInfo('chromecast', 'no off time running')
+        }
+        // only switch beamer on if chromecast is actually showing something
+        logInfo('chromecast', 'is streaming from '+app)
+        chill_zone_beamer.sendCommand("ON")
+        chill_zone_screen_button_down.sendCommand("ON")
         // set input to HDMI2 - chromecast
         sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071576")
-        logInfo('beamer', 'Switch to input HDMI2')
+        val state = chill_zone_beamer.state.toString
+        logInfo('beamer', 'Switch from {} to input HDMI2',state)
+      }
     }
 end
 
-// ----------------------------------------------------------------------------
-
-rule "Screen up"
-when
-    Item chill_zone_screen_button_up received command ON
-then
-    logInfo('screen', 'Screen up')
-    Thread::sleep(2000)
-    chill_zone_screen_button_up.sendCommand(OFF)
-end
-
-rule "Screen stop"
-when
-    Item chill_zone_screen_button_stop received command ON
-then
-    logInfo('screen', 'Screen stop')
-    Thread::sleep(2000)
-    chill_zone_screen_button_stop.sendCommand(OFF)
-end
-
-rule "Screen down"
-when
-    Item chill_zone_screen_button_down received command ON
-then
-    logInfo('screen', 'Screen down')
-    Thread::sleep(2000)
-    chill_zone_screen_button_down.sendCommand(OFF)
-end

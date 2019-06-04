@@ -1,0 +1,6 @@
+rule "proxy IR mqtt"
+when
+    Item proxyIR received command
+then
+    IRCode_01.sendCommand(transform("MAP", "ir.map", receivedCommand.toString))
+end

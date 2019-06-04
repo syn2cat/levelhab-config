@@ -7,16 +7,22 @@ Group   engineering     "Engineering"   (main_floor)
 Group   lab             "Lab"           (main_floor)
 Group   chill_zone      "Chill Zone"    (main_floor)
 Group   entrance        "Entrance"      (main_floor)
+Group   area42          "Area42"        (main_floor)
 
 //-------------------------------------------------------------------------------
 
-Switch entrance_door_status             "Door Status"                                       { channel="mqtt:topic:entrance_door_status:status"     }
+Number  entrance_people_counter         "People Counter [%s]"   <parents_1_1> (entrance)
+Switch  entrance_door_status            "Door Status"                                       { channel="mqtt:topic:entrance_door_status:status"     }
 Switch  entrance_ceiling_lamps          "Ceiling Lamps"         <lightbulb> (entrance)      { channel="mqtt:topic:entrance_ceiling_lamps:power"    }
 Switch  chill_zone_lamps                "Lamps"                 <lightbulb> (chill_zone)    { channel="mqtt:topic:chill_zone_lamps:power"          }
 Switch  engineering_table_lamps         "Table Lamps"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps:power"   }
 Switch  engineering_ceiling_lamps       "Ceiling Lamps"         <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
 Switch  engineering_status_lamp         "Status Lamp"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }
 Switch  engineering_ceiling_phone_flash "Ceiling Phone Flash"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_phone_flash:pulse"   }
+Switch  area42_status_lamp              "Status Lamp"           <lightbulb> (area42)        { channel="mqtt:topic:area42_status_lamp:power"        }
+Switch  lab_soldering_table             "Soldering table"       <lightbulb> (lab)           { channel="mqtt:topic:mosquitto:lab_soldering_table:power" }
+
+
 
 // ----------------------------------------------------------------------------
 
@@ -38,6 +44,10 @@ Switch  chill_zone_beamer
 
 // ----------------------------------------------------------------------------
 
+//Switch  chill_zone_meaow "Meaow" {channel="exec:command:meaow:run"}
+
+// ----------------------------------------------------------------------------
+
 Switch chill_zone_screen_button_up
     "Screen up"
     { channel="mqtt:topic:chill_zone_screen:up", autoupdate="false" }
@@ -49,3 +59,10 @@ Switch chill_zone_screen_button_stop
 Switch chill_zone_screen_button_down
     "Screen down"
     { channel="mqtt:topic:chill_zone_screen:down", autoupdate="false" }
+
+Rollershutter chill_projection_screen "Projection Screen"
+
+
+String IRCode_01		"IR Code"			{ channel="mqtt:topic:mosquitto:irremote:ir_code" }
+String proxyIR
+         

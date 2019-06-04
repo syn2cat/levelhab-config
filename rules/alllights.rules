@@ -1,0 +1,23 @@
+rule "All Lights ON"
+when
+  Item all_lights changed from OFF to ON
+then
+  engineering_table_lamps.sendCommand("ON")
+  engineering_ceiling_lamps.sendCommand("ON")
+  //all_engineering_lights.postUpdate("ON")
+  chill_zone_lamps.sendCommand("ON")
+  entrance_ceiling_lamps.sendCommand("ON")
+end
+
+
+rule "All Lights OFF"
+when
+  Item all_lights changed from ON to OFF
+then
+  engineering_table_lamps.sendCommand("OFF")
+  engineering_ceiling_lamps.sendCommand("OFF")
+  chill_zone_lamps.sendCommand("OFF")
+  entrance_ceiling_lamps.sendCommand("OFF")
+end
+
+

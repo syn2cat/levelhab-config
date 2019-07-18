@@ -1,35 +1,69 @@
 
 var Timer ChromeCastOffTimer = null
+val peoplecountermax = 0  // if openhab is restarted, the max value is lost... do we need persistence, how does that work?
+val SpaceStatus = ''
+
+rule "Startup"
+when
+    System started
+then
+  if (entrance_door_status.state.toString == 'OFF') {
+      SpaceStatus = 'open'
+  } else { 
+      SpaceStatus = 'closed'
+  }
+end
 
 rule "Door Status"
 when
     Item entrance_door_status changed
 then
     val state = entrance_door_status.state.toString
-
+    val peoplecountermax 
     // the sensor state is inverted:
     //   OFF means opened
     //   ON  means opened
     if (state == 'OFF') {
         logInfo('door', 'opened')
+        SpaceStatus = 'open'
         entrance_ceiling_lamps.sendCommand("ON")
+        entrance_marbleadder_lamps.sendCommand("ON")
         chill_zone_lamps.sendCommand("ON")
         engineering_table_lamps.sendCommand("ON")
         engineering_ceiling_lamps.sendCommand("ON")
         engineering_status_lamp.sendCommand("ON")
         area42_status_lamp.sendCommand("ON")
+        executeCommandLine("/etc/openhab2/syn2cat/spaceapi-set-status.sh open")
+        // needs current time in OpenTime
+        // sendTweet("It's "+OpenTime+" and we are open \o/ \ncome in and create something awesome =) \nhttps://Level2.lu/openingTimes")
+
     } else {
         logInfo('door', 'closed')
+        SpaceStatus = 'closed'
         // turn the beamer off
         sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")
         chill_zone_screen_button_up.sendCommand("ON")
         entrance_ceiling_lamps.sendCommand("OFF")
+        entrance_marbleadder_lamps.sendCommand("OFF")
         chill_zone_lamps.sendCommand("OFF")
         engineering_table_lamps.sendCommand("OFF")
         engineering_ceiling_lamps.sendCommand("OFF")
         engineering_status_lamp.sendCommand("OFF")
         area42_status_lamp.sendCommand("OFF")
         lab_soldering_table.sendCommand("OFF")
+        IRCode.sendCommand(transform("MAP", "ir.map", "amp_off"))
+        executeCommandLine("/etc/openhab2/syn2cat/spaceapi-set-status.sh closed")
+        // needs current time in OpenTime
+        // and number of people in peopleMax="\nThere were up to $peopleMax hackers today.\n"
+        peoplecountermax=entrance_people_counter_max.state
+        if(peoplecountermax>8) {
+            peopleMax="\nThere were up to "+peoplecountermax+" hackers today.\n"
+        } else {
+            peopleMax=".".repeat(peoplecountermax)
+        }
+        logInfo("door", "twitter message: "+ OpenTime+peopleMax)
+        // sendTweet("We just closed our doors at "+OpenTime+peopleMax+" See you very soon... \nhttps://Level2.lu/openingTimes")
+        entrance_people_counter_max.postUpdate(0) 
     }
     
     
@@ -47,10 +81,26 @@ then
     val count = java.lang.Integer.parseInt(
         transform("XPATH", "/table/tr[4]/td[2]/text()", response).trim()
     )
+    if ( SpaceStatus == 'closed' ) {
+        count=0
+    }
     if ( count != Integer.parseInt(entrance_people_counter.previousState().state.toString)) {
         entrance_people_counter.postUpdate(count)
+        // fresh run needs a max init, later we use persistence to init
+        if (entrance_people_counter_max.state == NULL) {entrance_people_counter_max.postUpdate(count) }
+        // count is bigger, so we got a new maximum
+        if(entrance_people_counter_max.state < count) { 
+            entrance_people_counter_max.postUpdate(count) 
+            logInfo("door", "People counter maximum set to "+ count)
+        }
+        executeCommandLine("/etc/openhab2/syn2cat/spaceapi-update-peoplecount.sh "+count)
     }
 end
+        // moved this to some external scripts, way easier with debugging and quoting
+        // /usr/bin/curl --max-time 1 --silent --data key="$spaceapikey" --data-urlencode 'sensors={"sensors":{"people_now_present":[{"value":'"$presency"'}]}}' https://spaceapi.syn2cat.lu/sensor/set
+        // executeCommandLine("/usr/bin/curl -v --max-time 1 --data key=$(cat /etc/openhab2/spaceapikey.txt) --data-urlencode 'sensors={\"sensors\":{\"people_now_present\":[{\"value\":'+count+'}]}}' https://spaceapi.syn2cat.lu/sensor/set >/tmp/c.log 2>&1")
+        // needs import java.net.URLEncoder
+        // sendHttpGetRequest("https://spaceapi.syn2cat.lu/sensor/set?"+URLEncoder::encode('key='+spaceapikey+'&sensors={sensors":{"people_now_present":[{"value":'+count+'}]}}')
 
 // ----------------------------------------------------------------------------
 
@@ -58,7 +108,8 @@ rule "Tweet People Count"
 when
     Item entrance_people_counter changed
 then
-//   sendTweet('There are currently ' + entrance_people_counter.state.toString + ' hackers present. Just pass by!')
+    // val people = entrance_people_counter.state.toString
+    // sendTweet('There are currently ' + people + ' hackers present. Just pass by!')
 end
 
 // ----------------------------------------------------------------------------
@@ -87,11 +138,35 @@ then
 
     if (state == 'ON') {
         // turn the beamer on
-        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3101fe0660") 
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3101fe0660")
+        chill_zone_screen_button_down.sendCommand("ON")
     } else {
         // turn the beamer off
-        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")     
     }
+    val beamerStatus = transform("XPATH", "/return/text()", beamerResponse).replace("\n", '')
+    logInfo("beamer", "Beamer state: {}", beamerStatus)
+end
+
+rule "Beamer input"
+when
+    Item chill_zone_beamer_input received command
+then
+    val state = chill_zone_beamer_input.state.toString
+    var beamerResponse
+
+    if (state == 'hdmi1') {
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071475") 
+    } else  if (state == 'hdmi2') {
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071576")     
+    } else if (state == 'dvi') {
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
+    } else if (state == 'vga1') {
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070162")
+    } else if (state == 'vga2') {
+        beamerResponse = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070263")  
+    }
+    else { }
     val beamerStatus = transform("XPATH", "/return/text()", beamerResponse).replace("\n", '')
     logInfo("beamer", "Beamer state: {}", beamerStatus)
 end

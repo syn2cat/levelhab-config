@@ -1,0 +1,15 @@
+rule "Status Lights ON"
+when
+  Item all_status_lights received update ON
+then
+  engineering_status_lamp.sendCommand("ON")
+  area42_status_lamp.sendCommand("ON")
+end
+
+rule "Status Lights OFF"
+when
+  Item all_status_lights received update OFF
+then
+  engineering_status_lamp.sendCommand("OFF")
+  area42_status_lamp.sendCommand("OFF")
+end

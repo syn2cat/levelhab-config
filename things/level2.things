@@ -14,11 +14,18 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
                 stateTopic="stat/entrance/door_status/POWER"
             ]
     }
-
+    
     Thing topic entrance_ceiling_lamps "Entrance Ceiling Lamps" @ "Entrance" {
         Channels:
             Type switch : power  "Power"  [
                 commandTopic="cmnd/entrance/ceiling_lamp/Power"
+            ]
+    }
+    
+    Thing topic entrance_marbleadder_lamps "Entrance Marbleadder Lamps" @ "Entrance" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/entrance/marbleadder_lamp/Power"
             ]
     }
 
@@ -45,6 +52,7 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
                 commandTopic="cmnd/chill_zone/sonoffs/Power"
             ]
     }
+    Thing exec:command:beamerpower [command="/sbin/apcaccess -u", interval=5, timeout=2, autorun=false]
 
     // ----------------------------------------------------------------------------
 
@@ -90,7 +98,7 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
     Thing topic lab_soldering_table "Soldering table" @ "Lab" {
         Channels:
             Type switch : power  "Power"  [
-                commandTopic="cmnd/lab/soldering_table/Power", stateTopic="stat/lab/soldering_table/Power"
+                commandTopic="cmnd/lab/soldering_table/Power", stateTopic="stat/lab/soldering_table/POWER"
             ]
     }
 
@@ -100,7 +108,8 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
     Thing topic irremote "IR remote" @ "Chill Zone" {
 
             Type string : ir_code "ircode" 
-            [ commandTopic="cmnd/chill_zone/irremote/IRSEND"
+            [ 
+                commandTopic="cmnd/chill_zone/irremote/IRSEND"
             ]
 
     }

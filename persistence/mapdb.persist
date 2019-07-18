@@ -4,4 +4,5 @@ Strategies {
 
 Items {
     entrance_people_counter: strategy = everyChange
+    entrance_people_counter_max: strategy = everyChange
 }

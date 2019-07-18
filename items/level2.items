@@ -12,14 +12,16 @@ Group   area42          "Area42"        (main_floor)
 //-------------------------------------------------------------------------------
 
 Number  entrance_people_counter         "People Counter [%s]"   <parents_1_1> (entrance)
+Number  entrance_people_counter_max     "People Counter Max [%s]"   <parents_1_1> (entrance)
 Switch  entrance_door_status            "Door Status"                                       { channel="mqtt:topic:entrance_door_status:status"     }
 Switch  entrance_ceiling_lamps          "Ceiling Lamps"         <lightbulb> (entrance)      { channel="mqtt:topic:entrance_ceiling_lamps:power"    }
+Switch  entrance_marbleadder_lamps       "Marbleadder Lamps"     <lightbulb> (entrance)      { channel="mqtt:topic:mosquitto:entrance_marbleadder_lamps:power"  }
 Switch  chill_zone_lamps                "Lamps"                 <lightbulb> (chill_zone)    { channel="mqtt:topic:chill_zone_lamps:power"          }
 Switch  engineering_table_lamps         "Table Lamps"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps:power"   }
 Switch  engineering_ceiling_lamps       "Ceiling Lamps"         <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
 Switch  engineering_status_lamp         "Status Lamp"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }
 Switch  engineering_ceiling_phone_flash "Ceiling Phone Flash"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_phone_flash:pulse"   }
-Switch  area42_status_lamp              "Status Lamp"           <lightbulb> (area42)        { channel="mqtt:topic:area42_status_lamp:power"        }
+Switch  area42_status_lamp              "Status Lamp"           <lightbulb> (area42)        { channel="mqtt:topic:mosquitto:area42_status_lamp:power" }
 Switch  lab_soldering_table             "Soldering table"       <lightbulb> (lab)           { channel="mqtt:topic:mosquitto:lab_soldering_table:power" }
 
 
@@ -41,6 +43,26 @@ String  chill_zone_chromecast_status
 Switch  chill_zone_beamer
     "Beamer"
     (chill_zone)
+String chill_zone_beamer_input          "beamer input"      (chill_zone)
+// please help: beamer current state can be optained like this:
+//wget -qO - 'http://10.2.113.7/tgi/return.tgi?query=info' |awk -F'[<>]' '/<info>/{print substr($3,33,2)}'
+// the awk extracts the info. It is in format '<return>NG</return>' or '<return><info>data</info></return>
+//NG = off
+// from data, the interesting part is chars 33 and 34
+//                                vv
+//2a3139c616503735303000000048e60102ac0c010076
+//00=no signal
+//01=VGA1
+//02=DVI (slideshow)
+//03=composite
+//04=s-video
+//05=component
+//09=VGA2
+//11=LAN 
+//12=USB A (presentation to go)
+//13=USB B (WTF?)
+//15=hdmi2 (chromecast)
+
 
 // ----------------------------------------------------------------------------
 
@@ -63,6 +85,6 @@ Switch chill_zone_screen_button_down
 Rollershutter chill_projection_screen "Projection Screen"
 
 
-String IRCode_01		"IR Code"			{ channel="mqtt:topic:mosquitto:irremote:ir_code" }
+String IRCode		"IR Code"			{ channel="mqtt:topic:mosquitto:irremote:ir_code" }
 String proxyIR
          

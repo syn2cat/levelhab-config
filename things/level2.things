@@ -52,7 +52,7 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
                 commandTopic="cmnd/chill_zone/sonoffs/Power"
             ]
     }
-    Thing exec:command:beamerpower [command="/sbin/apcaccess -u", interval=5, timeout=2, autorun=false]
+//    Thing exec:command:beamerpower [command="/sbin/apcaccess -u", interval=5, timeout=2, autorun=false]
 
     // ----------------------------------------------------------------------------
 

@@ -1,0 +1,82 @@
+
+// https://www.openhab.org/docs/configuration/iconsets/classic/
+
+Group   level2          "Level2"
+
+Group   ground_floor    "Ground Floor" <groundfloor> (level2)
+Group   main_floor      "Second Floor" <firstfloor>  (level2)
+
+Group   engineering     "Engineering"   (main_floor)
+Group   lab             "Lab"           (main_floor)
+Group   chill_zone      "Chill Zone"    (main_floor)
+Group   entrance        "Entrance"      (main_floor)
+
+//-------------------------------------------------------------------------------
+
+// https://community.openhab.org/t/sonoff-tasmota-with-mqtt-binding-2-4-using-config-files/61494
+
+
+
+Switch  ground_floor_door           "Door"          <frontdoor> (ground_floor)
+
+Switch  engineering_table_lamps     "Table Lamps"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps_socket:power" }
+Switch  engineering_ceiling_lamps   "Ceiling Lamps" <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps_socket:power" }
+
+Switch  chill_zone_lamps      
+    "Lamps"   
+    <lightbulb> 
+    (chill_zone) 
+    { channel="mqtt:topic:chill_zone_lamps_socket:power" }
+
+Number  chill_zone_lamps_socket_switch_vcc      
+    "Switch Voltage [%.3f]"    
+    (chill_zone) 
+    { channel="mqtt:topic:chill_zone_lamps_socket_switch:voltage" }
+
+String  chill_zone_lamps_socket_switch_uptime      
+    "Uptime [%s]"    
+    (chill_zone) 
+    { channel="mqtt:topic:chill_zone_lamps_socket_switch:uptime" }
+
+Number  chill_zone_lamps_socket_switch_rssi      
+    "RSSI [%d]"    
+    (chill_zone) 
+    { channel="mqtt:topic:chill_zone_lamps_socket_switch:rssi" }
+
+// If ChromeCast doesn't work you have to link this item with the Chromecast channel manually
+String  chill_zone_chromecast_appid    
+    "Chromecast AppId [%s]"
+    { channel="chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08:appId" }
+
+// If ChromeCast doesn't work you have to link this item with the Chromecast channel manually
+String  chill_zone_chromecast_status      
+    "Chromecast Status [%s]"
+    { channel="chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08:statustext" }
+
+Switch  chill_zone_beamer_switch      
+    "Beamer"    
+    (chill_zone)
+
+Number chill_zone_beamer_input
+    "Beamer Input"
+
+// Selection chill_zone_beamer_input 
+//     "Beamer Input"
+//     (chill_zone)
+
+// Selection chill_zone_beamer_input
+//     "Beamer Input"
+//     (chll_zone)
+//     mappings=[
+//         0="DVI", 
+//         1="HDMI 1", 
+//         2="HDMI 2",
+//         3="VGA 1",
+//         4="VGA 2"
+//     ]
+
+Switch  chill_zone_lamps_switch
+    { channel="mqtt:topic:chill_zone_lamps_socket_switch:power" }
+
+
+// Item types: https://www.openhab.org/docs/configuration/items.html#type

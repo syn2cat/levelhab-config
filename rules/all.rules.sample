@@ -1,0 +1,173 @@
+
+
+// https://www.openhab.org/addons/bindings/http1/
+
+// Command types: OnOffType, IncreaseDecreaseType, PercentType, HSBType, ...
+// Events: changed, received update, received command
+// Commands: postUpdate(), sendCommand(), ...
+
+// The following two are equal:
+// chill_zone_lamps_switch.sendCommand(chill_zone_lamps.state as OnOffType)
+// sendCommand(chill_zone_lamps_switch, chill_zone_lamps.state as OnOffType)
+
+// Variables available in the execution block:
+// receivedCommand, previousState, triggeringItem, receivedEvent
+
+import java.util.List
+import java.util.ArrayList
+
+
+rule "Open Door"
+when
+    Item ground_floor_door changed
+then
+    // the IP of the real relay is 10.0.101.6
+    //val host = '10.0.101.6'
+    // val host = 'localhost:9090'
+    // http://10.0.101.6/state.xml?relay1State=2&pulseTime1=5
+    //val String url = "http://" + host + "/state.xml"
+    //logInfo("RestApi", "URL: {}", url)
+
+    // val String state = sendHttpGetRequest(url)
+    // logInfo("RestApi", "Output: {}", state)
+
+    //val String longurl = "http://www.deutschlandfunk.de/podcast-nachrichten.1257.de.podcast.xml"
+    val String response = sendHttpGetRequest("http://10.0.101.6/state.xml?relay1State=2&pulseTime1=55", 1000)
+    
+    if (response === null) {
+        logInfo("RelayState", "State: null")
+    } else {
+        val String relayState = transform("XPATH", "/datavalues/relay1state", response)
+        logInfo("RelayState", "State: " + relayState)
+    }
+    
+    // 19:19:15.207 [ERROR] [e.smarthome.model.script.actions.HTTP] - Fatal transport error: 
+    // java.util.concurrent.ExecutionException: 
+    // org.eclipse.jetty.client.HttpResponseException: 
+    // HTTP protocol violation: bad response on HttpConnectionOverHTTP@2c22f14b(l:/10.2.113.167:48056 <-> r:/10.0.101.6:80,closed=false)=>HttpChannelOverHTTP@24f1b504(exchange=HttpExchange@797f0a37 req=TERMINATED/null@null res=PENDING/null@null)[send=HttpSenderOverHTTP@77bae95f(req=QUEUED,snd=COMPLETED,failure=null)[HttpGenerator@33643fd2{s=START}],recv=HttpReceiverOverHTTP@1a14f52f(rsp=IDLE,failure=null)[HttpParser{s=CLOSE,0 of -1}]]<-SocketChannelEndPoint@1bbb6ae8{/10.0.101.6:80<->/10.2.113.167:48056,OPEN,fill=-,flush=-,to=1/0}{io=0/0,kio=0,kro=1}->HttpConnectionOverHTTP@2c22f14b(l:/10.2.113.167:48056 <-> r:/10.0.101.6:80,closed=false)=>HttpChannelOverHTTP@24f1b504(exchange=HttpExchange@797f0a37 req=TERMINATED/null@null res=PENDING/null@null)[send=HttpSenderOverHTTP@77bae95f(req=QUEUED,snd=COMPLETED,failure=null)[HttpGenerator@33643fd2{s=START}],recv=HttpReceiverOverHTTP@1a14f52f(rsp=IDLE,failure=null)[HttpParser{s=CLOSE,0 of -1}]]
+end
+
+
+rule "Beamer Power"
+when
+    Item chill_zone_beamer_switch changed
+then
+    val state = chill_zone_beamer_switch.state.toString
+    // logInfo("RestApi", "Command: {}", receivedCommand)
+    if (state == 'ON') {
+        state = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3101fe0660")
+    } else {
+        state = sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3102fd0660")
+    }
+    logInfo("Beamer", "State: {}", state)
+end
+
+rule "Beamer Input"
+when
+    Item chill_zone_beamer_input changed
+then
+    val state = chill_zone_beamer_input.state
+    
+    // val List<String> commands = newArrayList(
+    //     "2a3109f6070566",
+    //     "2a3109f6071475",
+    //     "2a3109f6071576",
+    //     "2a3109f6070162",
+    //     "2a3109f6070263"
+    // )
+
+    // val url = "http://10.2.113.7/tgi/return.tgi?command=" + commands.get(state)
+    
+    logInfo("Bamer_Input", "Beamer Input: {}", state)
+
+    switch (state) {
+
+        // DVI - hackerspace video
+        case 0: sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070566")
+        
+        // HDMI1
+        case 1: sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071475")
+        
+        // HDMI2 - chromecast
+        case 2: sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6071576")
+        
+        // VGA1
+        case 3: sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070162")
+        
+        // VGA2
+        case 4: sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3109f6070263")
+    }
+end
+
+rule "Switch changed"
+when
+    Item chill_zone_lamps_switch changed
+then
+    logInfo("Rules", "Switch changed: {}", chill_zone_lamps_switch.state)
+    chill_zone_lamps.sendCommand(chill_zone_lamps_switch.state as OnOffType)
+end
+
+rule "Lamps changed"
+when
+    Item chill_zone_lamps changed
+then
+    logInfo("Rules", "Lamps changed: {}", chill_zone_lamps_switch.state)
+    chill_zone_lamps_switch.sendCommand(chill_zone_lamps.state as OnOffType)
+end
+
+rule "Switch voltage"
+when
+    Item chill_zone_lamps_socket_switch received update or Item chill_zone_lamps_socket_switch changed
+then
+    logInfo("Rules", "Voltage: {}", chill_zone_lamps_switch)
+    // chill_zone_lamps_socket_vcc.postUpdate()
+end
+
+rule "Chromecast changed"
+when
+    Item chill_zone_chromecast_status changed //or Item chill_zone_chromecast_appid changed 
+    // or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08 changed or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08 received update or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08 received command
+    // or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_appId changed or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_appId received update or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_appId received command
+    // or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_CC1AD845 changed or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_CC1AD845 received update or Item chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_CC1AD845 received command
+    // Item chill_zone_chromecast changed
+then
+
+    sendHttpGetRequest("http://10.2.113.7/tgi/return.tgi?command=2a3101fe0660")
+
+    // @todo: wait here until the beamer is online
+
+    //val app = chromecast_chromecast_b000d809ccb35a409a3dd3d14e0fbf08_CC1AD845.state.toString
+    val app = chill_zone_chromecast_status.state.toString
+    val input = null
+    if (app == null || app == UNDEF || app == 'UNDEF' || app == '' ) {
+    // if (app == null || app == 'UNDEF' ) {
+        input = 0 // hackerspace video
+        chill_zone_beamer_input.postUpdate(input)
+        // chill_zone_beamer_input.sendCommand(input)
+    } else {
+        input = 2 // chromecast
+        chill_zone_beamer_input.postUpdate(input)
+        // chill_zone_beamer_input.sendCommand(input)
+    }
+    
+    logInfo("beamer", "Set beamer input: {}", input)
+end
+
+// rule "status received update"
+// when
+//     Item status received update
+// then
+//     relaySwitch.postUpdate(if(status.state.toString == "1") ON else OFF)
+// end
+
+
+// Persistence services and the Rule engine are started in parallel. Because of 
+// this, it is possible that, during an openHAB startup, Rules will execute before 
+// Item states used by those Rules have been restored. (In this case, those unrestored 
+// Items have an "undefined" state when the Rule is executed.) Therefore, Rules 
+// that rely on persisted Item states may not work correctly on a consistent basis.
+
+
+// IPs:
+//
+//  * ChromeCast: http://10.2.113.120:8008

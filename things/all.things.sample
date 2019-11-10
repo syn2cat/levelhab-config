@@ -1,0 +1,60 @@
+
+Bridge mqtt:broker:mosquitto "Mosquitto" [ 
+    host="localhost", 
+    port=1883, 
+    secure=false, 
+    username="", 
+    password="", 
+    clientID="openHAB2"
+]{
+    
+    Thing topic chill_zone_lamps_socket "Power Socket" @ "Chill zone" {
+        Channels:
+            Type switch : power  "Power"  [
+                stateTopic="stat/chill_zone/lamp/Power",
+                commandTopic="cmnd/chill_zone/lamp/Power"
+            ]
+    }
+
+    Thing topic engineering_table_lamps_socket "Table Power Socket" @ "Engineering" {
+        Channels:
+            Type switch : power  "Power"  [
+                stateTopic="stat/engineering/table_lamp/Power",
+                commandTopic="cmnd/engineering/table_lamp/Power"
+            ]
+    }
+
+    Thing topic engineering_ceiling_lamps_socket "Ceiling Power Socket" @ "Engineering" {
+        Channels:
+            Type switch : power  "Power"  [
+                stateTopic="stat/engineering/ceiling_lamp/Power",
+                commandTopic="cmnd/engineering/ceiling_lamp/Power"
+            ]
+    }
+
+    // Thing topic chill_zone_lamps_socket_switch "Power Socket Switch" @ "Chill zone" {
+    //     Channels:
+    //         Type switch : power  "Power"  [ 
+    //             stateTopic="stat/sonoff2/POWER",
+    //             commandTopic="cmnd/sonoff2/POWER"
+    //         ]
+    //         Type number : voltage "Voltage" [ 
+    //             stateTopic="tele/sonoff2/STATE",
+    //             transformationPattern="JSONPATH:$.Vcc"
+    //         ]
+    //         Type string : uptime "Uptime" [ 
+    //             stateTopic="tele/sonoff2/STATE",
+    //             transformationPattern="JSONPATH:$.Uptime"
+    //         ]
+    //         Type number : rssi "RSSI" [ 
+    //             stateTopic="tele/sonoff2/STATE",
+    //             transformationPattern="JSONPATH:$.Wifi.RSSI"
+    //         ]
+    // }
+
+}
+
+// When the callback URL matters - https://github.com/openhab/openhab2-addons/issues/1984#issuecomment-285320106
+// OpenHAB is not able to communicate with the chromecast => Remote host closed connection during handshake 
+// Thing chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08 [ipAddress="10.2.113.120", port=8008]
+Thing chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08 [ipAddress="10.2.113.120", port=8009]

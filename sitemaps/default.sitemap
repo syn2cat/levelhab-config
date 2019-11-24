@@ -1,55 +1,36 @@
 sitemap default label="Level2" {
+
     Frame label="Lights" {
-      Switch item=chill_zone_lamps label="Chill Lights" icon="light"
-      Switch item=all_engineering_lights label="Engineering Lights" icon="light"
-      Switch item=all_lights label="All Lights" icon="light"
+        Switch item=chill_zone_lamps label="Chill Lights" icon="light"
+        Switch item=all_engineering_lights label="Engineering Lights" icon="light"
+        Switch item=all_lights label="All Lights" icon="light"
     }
+
     Frame label="Multimedia" {
-      Switch item=chill_zone_beamer label="Beamer" icon="projector" mappings=[ON="on",OFF="off"]
-      Selection item=chill_zone_beamer_input label="input" mappings=['hdmi1'='HDMI','hdmi2'='Chromecast','dvi'='Slideshow','vga1'='VGA']
-      // mir brauchen en screen rule mat 3 status dei een kann setzen
-      // Switch item=chill_zone_screen_button_up label="Projection Screen (todo)" icon="screen" mappings=[up="up",stop="stop",down="down"]
-      Switch item=chill_projection_screen icon="screen" mappings=[UP="up",STOP="stop",DOWN="down"]
+        Switch item=chill_zone_beamer label="Beamer" icon="projector" mappings=[ON="on",OFF="off"]
+        Selection item=chill_zone_beamer_input label="input" mappings=['hdmi1'='HDMI','hdmi2'='Chromecast','dvi'='Slideshow','vga1'='VGA']
+        Switch item=chill_projection_screen icon="screen" mappings=[UP="up",STOP="stop",DOWN="down"]
     }
 
     Frame label="Amplifier" {
 	    Switch item=proxyIR label="power" mappings=['amp_on'='on','amp_off'='off']
-      Switch item=proxyIR label="volume" mappings=['amp_volup'='up','amp_voldown'='down']
-      Selection item=proxyIR label="input" mappings=['amp_jack1'='jack1','amp_jack2'='jack2','amp_hdmi'='hdmi','amp_optical'='optical','amp_cd'='cd','amp_tuner'='tuner']
-	  }
-    Frame label="Bluray" {
-      Switch item=proxyIR label="power" mappings=['br_power'='power']
-      Switch item=proxyIR label="play" mappings=['br_play'='play','br_pause'='pause'] icon="mediacontrol"
-      Switch item=proxyIR label="control" mappings=['br_menu'='menu','br_ok'='ok']
-      Switch item=proxyIR label="navigate" mappings=['br_left'='left','br_up'='up','br_down'='down','br_right'='right'] icon="movecontrol"
-      Switch item=proxyIR label="language" mappings=['br_language'='audio','br_subtitle'='subtitles']
-    }
-    Frame label="Other" {
-      // een knaeppchen deen nemmen aus geht
-      Switch item=lab_soldering_table label="Soldering Table" icon="poweroutlet" mappings=[OFF="off"]
-      Switch item=engineering_ceiling_phone_flash label="Phone flashlight" icon="siren" mappings=[OFF="off"]
-      // wei switchen ech dei 2 status lights?. Dat hei ass fir status un ze maachen falls se net un wiren
-      Switch item=all_status_lights label="Status lights" mappings=[ON="on"]
-    }
-//    Frame label="Main Floor" icon="firstfloor" {
-//        Group item=engineering
-//        // Group item=lab
-//        Group item=chill_zone
-//        Group item=entrance
-//
-//        // Selection item=chill_zone_beamer_input 
-//        //     label="Beamer Input" 
-//        //     mappings=[
-//        //         0="DVI",    // Hackerspace video
-//        //         1="HDMI 1", 
-//        //         2="HDMI 2", // Chromecast
-//        //         3="VGA 1",
-//        //         4="VGA 2"
-//        //     ]
-//    }
+        Switch item=proxyIR label="volume" mappings=['amp_volup'='up','amp_voldown'='down']
+        Selection item=proxyIR label="input" mappings=['amp_jack1'='jack1','amp_jack2'='jack2','amp_hdmi'='hdmi','amp_optical'='optical','amp_cd'='cd','amp_tuner'='tuner']
+	}
 
-//    Frame label="Ground Floor" icon="groundfloor" {
-//        Group item=ground_floor
-//        // Image url="https://raw.githubusercontent.com/wiki/openhab/openhab/images/features.png"
-//    }
+    Frame label="Bluray" {
+        Switch item=proxyIR label="power" mappings=['br_power'='power']
+        Switch item=proxyIR label="play" mappings=['br_play'='play','br_pause'='pause'] icon="mediacontrol"
+        Switch item=proxyIR label="control" mappings=['br_menu'='menu','br_ok'='ok']
+        Switch item=proxyIR label="navigate" mappings=['br_left'='left','br_up'='up','br_down'='down','br_right'='right'] icon="movecontrol"
+        Switch item=proxyIR label="language" mappings=['br_language'='audio','br_subtitle'='subtitles']
+    }
+
+    Frame label="Other" {
+        // the switch for the soldering table should only allow the OFF mode to prevent a burning hackerspace
+        Switch item=lab_soldering_table label="Soldering Table" icon="poweroutlet" mappings=[OFF="off"]
+        Switch item=engineering_ceiling_phone_flash label="Phone flashlight" icon="siren" mappings=[OFF="off"]
+        Switch item=all_status_lights label="Status lights" mappings=[ON="on"]
+    }
+
 }

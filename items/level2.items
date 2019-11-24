@@ -15,7 +15,7 @@ Number  entrance_people_counter         "People Counter [%s]"   <parents_1_1> (e
 Number  entrance_people_counter_max     "People Counter Max [%s]"   <parents_1_1> (entrance)
 Switch  entrance_door_status            "Door Status"                                       { channel="mqtt:topic:entrance_door_status:status"     }
 Switch  entrance_ceiling_lamps          "Ceiling Lamps"         <lightbulb> (entrance)      { channel="mqtt:topic:entrance_ceiling_lamps:power"    }
-Switch  entrance_marbleadder_lamps       "Marbleadder Lamps"     <lightbulb> (entrance)      { channel="mqtt:topic:mosquitto:entrance_marbleadder_lamps:power"  }
+Switch  entrance_marbleadder_lamps      "Marbleadder Lamps"     <lightbulb> (entrance)      { channel="mqtt:topic:mosquitto:entrance_marbleadder_lamps:power"  }
 Switch  chill_zone_lamps                "Lamps"                 <lightbulb> (chill_zone)    { channel="mqtt:topic:chill_zone_lamps:power"          }
 Switch  engineering_table_lamps         "Table Lamps"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps:power"   }
 Switch  engineering_ceiling_lamps       "Ceiling Lamps"         <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
@@ -84,6 +84,7 @@ Switch chill_zone_screen_button_down
 
 Rollershutter chill_projection_screen "Projection Screen"
 
+// ----------------------------------------------------------------------------
 
 String IRCode		"IR Code"			{ channel="mqtt:topic:mosquitto:irremote:ir_code" }
 String proxyIR

@@ -1,0 +1,9 @@
+// If ChromeCast doesn't work you have to link this item with the Chromecast channel manually
+String  chill_zone_chromecast_appid
+    "Chromecast AppId [%s]"
+    { channel="chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08:appId" }
+
+// If ChromeCast doesn't work you have to link this item with the Chromecast channel manually
+String  chill_zone_chromecast_status
+    "Chromecast Status [%s]"
+    { channel="chromecast:chromecast:b000d809ccb35a409a3dd3d14e0fbf08:statustext" }

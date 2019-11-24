@@ -52,7 +52,6 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
                 commandTopic="cmnd/chill_zone/sonoffs/Power"
             ]
     }
-//    Thing exec:command:beamerpower [command="/sbin/apcaccess -u", interval=5, timeout=2, autorun=false]
 
     // ----------------------------------------------------------------------------
 
@@ -104,14 +103,10 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
 
     // ----------------------------------------------------------------------------§
 
-         
     Thing topic irremote "IR remote" @ "Chill Zone" {
-
-            Type string : ir_code "ircode" 
-            [ 
-                commandTopic="cmnd/chill_zone/irremote/IRSEND"
-            ]
-
+        Type string : ir_code "ircode" [
+            commandTopic="cmnd/chill_zone/irremote/IRSEND"
+        ]
     }
 }
 

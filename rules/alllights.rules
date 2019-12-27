@@ -6,6 +6,7 @@ then
   engineering_ceiling_lamps.sendCommand("ON")
   //all_engineering_lights.postUpdate("ON")
   chill_zone_lamps.sendCommand("ON")
+  chill_zone_ikea_led.sendCommand("ON")
   entrance_ceiling_lamps.sendCommand("ON")
   entrance_marbleadder_lamps.sendCommand("ON")
 end
@@ -18,6 +19,7 @@ then
   engineering_table_lamps.sendCommand("OFF")
   engineering_ceiling_lamps.sendCommand("OFF")
   chill_zone_lamps.sendCommand("OFF")
+  chill_zone_ikea_led.sendCommand("OFF")
   entrance_ceiling_lamps.sendCommand("OFF")
   entrance_marbleadder_lamps.sendCommand("OFF")
 end

@@ -53,6 +53,13 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
             ]
     }
 
+    Thing topic chill_zone_ikea "Ikea LED Wall" @ "Chill zone" {
+        Channels:
+            Type switch : power "Power" [
+                commandTopic="cmnd/chill_zone/ikea_led/Power"
+            ]
+    }
+
     // ----------------------------------------------------------------------------
 
     Thing topic engineering_table_lamps "Engineering Table Lamps" @ "Engineering" {

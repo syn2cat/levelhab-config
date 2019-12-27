@@ -17,6 +17,7 @@ Switch  entrance_door_status            "Door Status"                           
 Switch  entrance_ceiling_lamps          "Ceiling Lamps"         <lightbulb> (entrance)      { channel="mqtt:topic:entrance_ceiling_lamps:power"    }
 Switch  entrance_marbleadder_lamps      "Marbleadder Lamps"     <lightbulb> (entrance)      { channel="mqtt:topic:mosquitto:entrance_marbleadder_lamps:power"  }
 Switch  chill_zone_lamps                "Lamps"                 <lightbulb> (chill_zone)    { channel="mqtt:topic:chill_zone_lamps:power"          }
+Switch  chill_zone_ikea_led             "Ikea LED Wall"         <lightbulb> (chill_zone)    { channel="mqtt:topic:mosquitto:chill_zone_ikea:power" }
 Switch  engineering_table_lamps         "Table Lamps"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_table_lamps:power"   }
 Switch  engineering_ceiling_lamps       "Ceiling Lamps"         <lightbulb> (engineering)   { channel="mqtt:topic:engineering_ceiling_lamps:power" }
 Switch  engineering_status_lamp         "Status Lamp"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }

@@ -34,6 +34,8 @@ then
         engineering_ceiling_lamps.sendCommand("ON")
         engineering_status_lamp.sendCommand("ON")
         area42_status_lamp.sendCommand("ON")
+        area42_table_lamp1.sendCommand("ON")
+        area42_table_lamp2.sendCommand("ON")
         executeCommandLine("/etc/openhab2/syn2cat/spaceapi-set-status.sh open")
         // needs current time in OpenTime
         // sendTweet("It's "+OpenTime+" and we are open \o/ \ncome in and create something awesome =) \nhttps://Level2.lu/openingTimes")
@@ -52,6 +54,8 @@ then
         engineering_ceiling_lamps.sendCommand("OFF")
         engineering_status_lamp.sendCommand("OFF")
         area42_status_lamp.sendCommand("OFF")
+        area42_table_lamp1.sendCommand("OFF")
+        area42_table_lamp2.sendCommand("OFF")
         lab_soldering_table.sendCommand("OFF")
         IRCode.sendCommand(transform("MAP", "ir.map", "amp_off"))
         executeCommandLine("/etc/openhab2/syn2cat/spaceapi-set-status.sh closed")

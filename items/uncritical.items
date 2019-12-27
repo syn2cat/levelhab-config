@@ -23,6 +23,8 @@ Switch  engineering_ceiling_lamps       "Ceiling Lamps"         <lightbulb> (eng
 Switch  engineering_status_lamp         "Status Lamp"           <lightbulb> (engineering)   { channel="mqtt:topic:engineering_status_lamp:power"   }
 Switch  engineering_ceiling_phone_flash "Ceiling Phone Flash"   <lightbulb> (engineering)   { channel="mqtt:topic:engineering_phone_flash:pulse"   }
 Switch  area42_status_lamp              "Status Lamp"           <lightbulb> (area42)        { channel="mqtt:topic:mosquitto:area42_status_lamp:power" }
+Switch  area42_table_lamp1              "Table Lamp1"           <lightbulb> (area42)        { channel="mqtt:topic:mosquitto:area42_table_lamp1:power" }
+Switch  area42_table_lamp2              "Table Lamp2"           <lightbulb> (area42)        { channel="mqtt:topic:mosquitto:area42_table_lamp2:power" }
 Switch  lab_soldering_table             "Soldering table"       <lightbulb> (lab)           { channel="mqtt:topic:mosquitto:lab_soldering_table:power" }
 
 // ----------------------------------------------------------------------------
@@ -55,3 +57,4 @@ String proxyIR
 Switch  all_lights              "All Lights"                <lightbulb> (level2)
 Switch  all_status_lights       "All Status Lights"         <lightbulb> (engineering)
 Switch  all_engineering_lights  "All Engineering Lights"    <lightbulb> (engineering)
+Switch  all_area42_table_lights "All Area42 Table Lights"   <lightbulb> (area42)

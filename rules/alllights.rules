@@ -9,6 +9,8 @@ then
   chill_zone_ikea_led.sendCommand("ON")
   entrance_ceiling_lamps.sendCommand("ON")
   entrance_marbleadder_lamps.sendCommand("ON")
+  area42_table_lamp1.sendCommand("ON")
+  area42_table_lamp2.sendCommand("ON")
 end
 
 
@@ -22,6 +24,8 @@ then
   chill_zone_ikea_led.sendCommand("OFF")
   entrance_ceiling_lamps.sendCommand("OFF")
   entrance_marbleadder_lamps.sendCommand("OFF")
+  area42_table_lamp1.sendCommand("OFF")
+  area42_table_lamp2.sendCommand("OFF")
 end
 
 

@@ -99,6 +99,20 @@ Bridge mqtt:broker:mosquitto "Mosquitto" [
             ]
     }
 
+    Thing topic area42_table_lamp1 "Area42 Table Lamp1" @ "Area42" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/area42/table/lamp1/Power"
+            ]
+    }
+
+    Thing topic area42_table_lamp2 "Area42 Table Lamp2" @ "Area42" {
+        Channels:
+            Type switch : power  "Power"  [
+                commandTopic="cmnd/area42/table/lamp2/Power"
+            ]
+    }
+
     // ----------------------------------------------------------------------------
 
     Thing topic lab_soldering_table "Soldering table" @ "Lab" {

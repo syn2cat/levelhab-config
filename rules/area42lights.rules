@@ -1,0 +1,18 @@
+rule "Area42 Table Lights ON"
+when
+    Item all_area42_table_lights changed from OFF to ON
+then
+    area42_table_lamp1.sendCommand("ON")
+    area42_table_lamp2.sendCommand("ON")
+end
+
+
+rule "Engineering Lights OFF"
+when
+    Item all_area42_table_lights changed from ON to OFF
+then
+    area42_table_lamp1.sendCommand("OFF")
+    area42_table_lamp2.sendCommand("OFF")
+end
+
+

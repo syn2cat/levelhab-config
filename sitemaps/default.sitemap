@@ -5,6 +5,16 @@ sitemap default label="Level2" {
         Switch item=all_engineering_lights label="Engineering Lights" icon="light"
         Switch item=all_area42_table_lights label="Area42 Table Lights" icon="light"
         Switch item=all_lights label="All Lights" icon="light"
+        Group item=Lights {
+            Switch item=entrance_marbleadder_lamps label="Marble Adder" icon="light"
+            Switch item=entrance_ceiling_lamps label="Entrance Clouds Lights" icon="light"
+            Switch item=area42_table_lamp1 label="Area42 Table left" icon="light"
+            Switch item=area42_table_lamp2 label="Area42 Table right" icon="light"
+            Switch item=engineering_ceiling_lamps label="Engineering Ceiling Lights" icon="light"
+            Switch item=engineering_table_lamps label="Engineering Table Lights" icon="light"
+            Switch item=chill_zone_ikea_led label="Ikea LED Wall" icon="light"
+
+        }
     }
 
     Frame label="Multimedia" {
@@ -20,7 +30,7 @@ sitemap default label="Level2" {
 	}
 
     Frame label="Bluray" {
-        Switch item=proxyIR label="power" mappings=['br_power'='power']
+        Switch item=proxyIR label="power" mappings=['br_power'='power'] 
         Switch item=proxyIR label="play" mappings=['br_play'='play','br_pause'='pause'] icon="mediacontrol"
         Switch item=proxyIR label="control" mappings=['br_menu'='menu','br_ok'='ok']
         Switch item=proxyIR label="navigate" mappings=['br_left'='left','br_up'='up','br_down'='down','br_right'='right'] icon="movecontrol"

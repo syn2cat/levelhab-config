@@ -3,6 +3,7 @@ sitemap default label="Level2" {
     Frame label="Lights" {
         Switch item=chill_zone_lamps label="Chill Lights" icon="light"
         Switch item=all_engineering_lights label="Engineering Lights" icon="light"
+        Switch item=all_area42_table_lights label="Area42 Table Lights" icon="light"
         Switch item=all_lights label="All Lights" icon="light"
     }
 

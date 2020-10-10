@@ -20,5 +20,5 @@ case "$1" in
        exit
        ;;
 esac
-/usr/bin/curl --max-time 1 --silent --data key="$spaceapikey" --data-urlencode sensors='{"state":{"open":'"$openstate"',"lastchange":'"$nai"'}}' https://spaceapi.syn2cat.lu/sensor/set
+/usr/bin/curl --max-time 3 --silent --data key="$spaceapikey" --data-urlencode sensors='{"state":{"open":'"$openstate"',"lastchange":'"$nai"'}}' https://spaceapi.syn2cat.lu/sensor/set
 

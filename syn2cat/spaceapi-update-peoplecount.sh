@@ -9,5 +9,5 @@ then
 fi
 spaceapikey="$(cat "$(dirname $0)"/spaceapikey.txt)"
 presency="$1"
-/usr/bin/curl --max-time 1 --silent --data key="$spaceapikey" --data-urlencode sensors='{"sensors":{"people_now_present":[{"value":'"$presency"'}]}}' https://spaceapi.syn2cat.lu/sensor/set
+/usr/bin/curl --max-time 3 --silent --data key="$spaceapikey" --data-urlencode sensors='{"sensors":{"people_now_present":[{"value":'"$presency"'}]}}' https://spaceapi.syn2cat.lu/sensor/set
 

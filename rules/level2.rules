@@ -7,11 +7,13 @@ rule "Startup"
 when
     System started
 then
+  logInfo("door", "Startup space status button "+ entrance_door_status.state.toString)
   if (entrance_door_status.state.toString == 'OFF') {
       SpaceStatus = 'open'
   } else { 
       SpaceStatus = 'closed'
   }
+  logInfo("door", "Startup space status set to "+ SpaceStatus)
 end
 
 rule "Door Status"
@@ -87,11 +89,15 @@ then
     val count = java.lang.Integer.parseInt(
         transform("XPATH", "/table/tr[4]/td[2]/text()", response).trim()
     )
+    // logInfo("door", "People counter raw value is "+ count + " previous is "+ Integer.parseInt(entrance_people_counter.previousState().state.toString))
+    // logInfo("door", "People counter space status "+ SpaceStatus)
+    
     if ( SpaceStatus == 'closed' ) {
         count=0
     }
     if ( count != Integer.parseInt(entrance_people_counter.previousState().state.toString)) {
         entrance_people_counter.postUpdate(count)
+        logInfo("door", "People counter set to "+ count)
         // fresh run needs a max init, later we use persistence to init
         if (entrance_people_counter_max.state == NULL) {entrance_people_counter_max.postUpdate(count) }
         // count is bigger, so we got a new maximum
